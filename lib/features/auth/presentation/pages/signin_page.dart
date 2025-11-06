@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
@@ -66,6 +68,8 @@ class _SigninPageState extends State<SigninPage> {
                   AuthGradientButton(
                     text: "Sign In",
                     onPressed: () {
+                      log(emailController.text.trim());
+                      log(passwordController.text.trim());
                       if (formKey.currentState!.validate()) {
                         context.read<AuthBloc>().add(
                           AuthSignIn(
