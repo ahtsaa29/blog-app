@@ -15,6 +15,7 @@ void main() async {
       providers: [
         BlocProvider(create: (_) => serviceLocator<AppUserCubit>()),
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+        // BlocProvider(create: (_) => serviceLocator<BlogBloc>()),
       ],
       child: const MyApp(),
     ),
@@ -31,15 +32,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
     super.initState();
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Blog App',
       debugShowCheckedModeBanner: false,
+      title: 'Blog App',
       theme: AppTheme.darkThemeMode,
       home: BlocSelector<AppUserCubit, AppUserState, bool>(
         selector: (state) {
@@ -47,9 +48,9 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, isLoggedIn) {
           if (isLoggedIn) {
-            return BlogPage();
+            return const BlogPage();
           }
-          return SigninPage();
+          return const SigninPage();
         },
       ),
     );

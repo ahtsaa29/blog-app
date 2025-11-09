@@ -21,7 +21,6 @@ abstract interface class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final SupabaseClient supabaseClient;
-
   AuthRemoteDataSourceImpl(this.supabaseClient);
 
   @override
@@ -42,6 +41,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         throw ServerException('User not found');
       }
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       log("eeeeee ${e.toString()}");
       throw ServerException(e.toString());
@@ -60,11 +61,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         email: email,
         data: {'name': name},
       );
+      log("Response use: ${response.user}");
       if (response.user == null) {
         throw ServerException('User is null');
       }
       return UserModel.fromJson(response.user!.toJson());
+    } on AuthException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
+      log("response error: ${e.toString()}");
       throw ServerException(e.toString());
     }
   }
@@ -77,6 +82,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
             .from('profiles')
             .select()
             .eq('id', currentUserSession!.user.id);
+        log('userdata :: ${userData.first}');
         return UserModel.fromJson(
           userData.first,
         ).copyWith(email: currentUserSession!.user.email);

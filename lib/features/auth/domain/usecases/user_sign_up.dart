@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_app/core/error/failures.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/core/common/entities/user.dart';
@@ -16,8 +18,11 @@ class UserSignUp implements Usecase<User, UserSignUpParams> {
         email: params.email,
         password: params.password,
       );
+      log("Response: $response");
       return response;
     } catch (e) {
+      log("Response: ${e.toString()}");
+
       return left(Failure(e.toString()));
     }
   }
